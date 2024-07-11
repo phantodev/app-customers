@@ -27,7 +27,8 @@
       "id": 8,
       "name": "Juliana Almeida",
       "role": "Gerente",
-      "status": true
+      "status": true,
+      "terms": true
     },
     {
       "id": 9,
@@ -45,7 +46,7 @@
       "id": 11,
       "name": "Lucas Santos",
       "role": "Especialista",
-      "status": false
+      "status": true
     },
     {
       "id": 12,

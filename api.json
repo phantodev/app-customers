@@ -1,0 +1,14 @@
+{
+    "profile": {
+        "from": {
+            "aceleration": "hrfc",
+            "distance": "gps",
+            "fuel": "sensor"
+        },
+        "to": {
+            "aceleration": "hrfc",
+            "distance": "can",
+            "fuel": "sensor"
+        }
+    }
+}

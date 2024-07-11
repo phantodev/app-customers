@@ -1,6 +1,5 @@
 'use client'
 import 'react-toastify/dist/ReactToastify.css'
-import { ICustomer } from '@/interfaces/customer'
 import { Button, Card, CardBody, Switch, Input } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -8,7 +7,19 @@ import { ToastContainer, toast } from 'react-toastify'
 import { getCustomerByID } from '@/app/useCases/customers/getCustomerByID'
 import { updateCustomerByID } from '@/app/useCases/customers/updateCustomerByID'
 import { useForm } from 'react-hook-form'
-import { TCustomer } from '@/app/schemas/schemasZod'
+import { createCustomerSchema, TCustomer } from '@/app/schemas/schemasZod'
+import dynamic from 'next/dynamic'
+import { zodResolver } from '@hookform/resolvers/zod'
+// import { DevTool } from '@hookform/devtools'
+
+// Isso só deve ser usado no modo Desenvolvedor
+// Comentar quando for para produção
+const DevTool = dynamic(
+  () => import('@hookform/devtools').then((mod) => mod.DevTool),
+  {
+    ssr: false,
+  },
+)
 
 type TCustomersDetailsPageProps = {
   id: string
@@ -19,7 +30,7 @@ export default function CustomersDetailsPage({
 }: {
   params: TCustomersDetailsPageProps
 }) {
-  const [customer, setCustomer] = React.useState<ICustomer | null>(null)
+  const [customer, setCustomer] = React.useState<TCustomer | null>(null)
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const [isFetching, setIsFetching] = React.useState<boolean>(false)
   const router = useRouter()
@@ -27,20 +38,35 @@ export default function CustomersDetailsPage({
   const {
     register,
     handleSubmit,
+    setValue,
+    control,
     formState: { errors },
-  } = useForm<TCustomer>()
+  } = useForm<TCustomer>({
+    mode: 'onChange',
+    resolver: zodResolver(createCustomerSchema),
+    defaultValues: {
+      terms: false,
+    },
+  })
 
   const handleGetCustomerByID = React.useCallback(async () => {
     try {
-      const response = await getCustomerByID(params.id)
+      const response: TCustomer = await getCustomerByID(params.id)
       setCustomer(response)
+      setValue('name', response.name)
+      setValue('role', response.role)
+      setValue('terms', response.terms)
       setIsLoading(false)
     } catch (error) {
       toast.error('Problemas com API!', {
         theme: 'colored',
       })
     }
-  }, [params.id])
+  }, [params.id, setValue])
+
+  React.useEffect(() => {
+    console.log(errors)
+  }, [errors])
 
   async function handleUpdateStatus(e: React.ChangeEvent<HTMLInputElement>) {
     try {
@@ -81,12 +107,18 @@ export default function CustomersDetailsPage({
       <section className="flex flex-1 px-6">
         <Card className="flex-1">
           {!isLoading ? (
-            <CardBody className="flex gap-3 p-6">
-              <form onSubmit={handleSubmit(handleUpdateCustomer)}>
+            <CardBody>
+              <form
+                onSubmit={handleSubmit(handleUpdateCustomer)}
+                className="flex flex-col gap-3 p-6"
+              >
                 <section className="text-xl">
                   <Input
                     type="text"
+                    autoComplete="off"
                     label="Nome"
+                    isInvalid={!!errors.name?.message}
+                    errorMessage={errors.name?.message}
                     variant="bordered"
                     defaultValue={customer?.name}
                     placeholder="Digite seu nome do cliente"
@@ -98,6 +130,8 @@ export default function CustomersDetailsPage({
                     type="text"
                     label="Função"
                     variant="bordered"
+                    isInvalid={!!errors.role?.message}
+                    errorMessage={errors.role?.message}
                     defaultValue={customer?.role}
                     placeholder="Digite a função do cliente"
                     {...register('role')}
@@ -135,6 +169,7 @@ export default function CustomersDetailsPage({
           )}
         </Card>
       </section>
+      <DevTool control={control} />
       <ToastContainer />
     </main>
   )
