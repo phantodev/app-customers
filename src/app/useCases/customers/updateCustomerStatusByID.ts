@@ -1,9 +1,9 @@
 import { api } from '@/app/config/axios'
 import { TCustomer } from '@/app/schemas/schemasZod'
 
-export async function updateCustomerByID(
+export async function updateCustomerStatusByID(
   id: string,
-  customer: TCustomer,
+  status: boolean,
 ): Promise<TCustomer> {
   await new Promise<void>((resolve) => {
     setTimeout(() => {
@@ -11,9 +11,7 @@ export async function updateCustomerByID(
     }, 4000)
   })
   const response = await api.patch(`/customers/${id}`, {
-    name: customer.name,
-    role: customer.role,
-    terms: customer.terms,
+    status,
   })
   return response.data
 }

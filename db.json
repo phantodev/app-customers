@@ -43,10 +43,11 @@
       "status": true
     },
     {
-      "id": 11,
-      "name": "Lucas Santos",
-      "role": "Especialista",
-      "status": true
+      "name": "Lucas Santos ",
+      "role": "Especialista Front ",
+      "terms": true,
+      "status": false,
+      "id": 11
     },
     {
       "id": 12,
