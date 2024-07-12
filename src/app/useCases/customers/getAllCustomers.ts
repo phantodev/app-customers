@@ -1,7 +1,7 @@
 import { api } from '@/app/config/axios'
-import { ICustomer } from '@/interfaces/customer'
+import { TCustomer } from '@/app/schemas/schemasZod'
 
-export async function getAllCustomers(): Promise<ICustomer[]> {
+export async function getAllCustomers(): Promise<TCustomer[]> {
   // await new Promise<void>((resolve) => {
   //   setTimeout(() => {
   //     resolve()
