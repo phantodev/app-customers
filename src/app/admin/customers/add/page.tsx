@@ -51,13 +51,15 @@ export default function AddFormCustomers() {
         </section>
       </section>
       <form
-        onSubmit={() => console.log('ENVIOU FORM')}
+        onSubmit={handleSubmit(() => console.log('ENVIOU FORM'))}
         className="grid grid-cols-3 gap-2 p-6"
       >
         <Input
           type="text"
           label="Nome"
           placeholder=""
+          isInvalid={!!errors.name?.message}
+          errorMessage={errors.name?.message}
           description="Nome com mínimo 10 caracteres"
           {...register('name')}
         />
