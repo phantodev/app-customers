@@ -20,11 +20,11 @@ import {
 } from '@nextui-org/react'
 import { Eye, Trash2 } from 'lucide-react'
 import { getAllCustomers } from '@/app/useCases/customers/getAllCustomers'
-import { ICustomer } from '@/interfaces/customer'
 import { deleteCustomer } from '@/app/useCases/customers/deleteCustomer'
+import { TCustomer } from '@/app/schemas/schemasZod'
 
 export default function CustomersPage() {
-  const [listCustomers, setListCustomers] = React.useState<ICustomer[]>([])
+  const [listCustomers, setListCustomers] = React.useState<TCustomer[]>([])
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const router = useRouter()
 
