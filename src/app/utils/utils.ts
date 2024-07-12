@@ -35,7 +35,7 @@ export async function getAddressByCEP(
   cep: string,
 ): Promise<IViaCEP | IViaCEPError> {
   const clearCEP = cep.replace(/\D/g, '')
-  const response = await api.get(`https://viacep.com.br/ws/${clearCEP}/json/`, {
+  const response = await api.get(`https://viacep.com.br/ws/${clearCEP}/json`, {
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
