@@ -33,7 +33,6 @@ export type IViaCEP = {
     | 'SP'
     | 'SE'
     | 'TO'
-    | null
   ibge: string
   gia: string
   ddd: string

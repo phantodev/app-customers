@@ -12,12 +12,16 @@ export const createCustomerSchema = z.object({
 export type TCustomer = z.infer<typeof createCustomerSchema>
 
 export const createUserSchema = z.object({
-  name: z.string().min(5, { message: 'Mínimo 10 caracteres' }),
-  cep: z.string(),
-  number: z.string(),
+  name: z.string().min(5, { message: 'Mínimo 5 caracteres' }),
+  cep: z.string().min(9, { message: 'Mínimo 9 caracteres' }),
+  number: z.string().min(1, { message: 'Mínimo 1 caracteres' }),
   cpf: z.string(),
   phone: z.string().min(11, { message: 'Mínimo 11 caracteres numéricos' }),
   status: z.boolean(),
+  street: z.string(),
+  district: z.string(),
+  city: z.string(),
+  state: z.string(),
   howMeet: z.string(),
 })
 
