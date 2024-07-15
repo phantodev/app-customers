@@ -1,6 +1,7 @@
 'use client'
 
 import { createUserSchema, TUser } from '@/app/schemas/schemasZod'
+import 'react-toastify/dist/ReactToastify.css'
 import {
   Button,
   cn,
@@ -22,6 +23,7 @@ import {
 import React from 'react'
 import { IViaCEP } from '@/interfaces/cep'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { createUser } from '@/app/useCases/users/createUser'
 
 export default function AddFormCustomers() {
   const router = useRouter()
@@ -37,10 +39,14 @@ export default function AddFormCustomers() {
     handleSubmit,
     setValue,
     watch,
+    reset,
     // control,
     formState: { errors },
   } = useForm<TUser>({
     resolver: zodResolver(createUserSchema),
+    defaultValues: {
+      status: false,
+    },
   })
 
   async function handleGetAddress(cep: string) {
@@ -62,8 +68,29 @@ export default function AddFormCustomers() {
   }
 
   async function handleCreateUser(data: TUser) {
-    console.log(data)
+    try {
+      setIsFetching(true)
+      await createUser(data)
+      toast.success('Usuário criado', {
+        theme: 'colored',
+      })
+      reset()
+    } catch (error) {
+      toast.error('Problemas ao salvar', {
+        theme: 'colored',
+      })
+    } finally {
+      setIsFetching(false)
+    }
   }
+
+  function handleStatus(e: React.ChangeEvent<HTMLInputElement>) {
+    setValue('status', e.target.checked)
+  }
+
+  React.useEffect(() => {
+    console.log(errors)
+  }, [errors])
 
   return (
     <main className="flex h-screen flex-col">
@@ -173,6 +200,9 @@ export default function AddFormCustomers() {
             {...register('phone')}
           />
           <Switch
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleStatus(e)
+            }
             classNames={{
               base: cn(
                 'inline-flex flex-row-reverse w-full max-w-md bg-content1 hover:bg-content2 items-center',

@@ -24,13 +24,14 @@ import { deleteCustomer } from '@/app/useCases/customers/deleteCustomer'
 import { TCustomer } from '@/app/schemas/schemasZod'
 
 export default function CustomersPage() {
+  const [page, setPage] = React.useState(1)
   const [listCustomers, setListCustomers] = React.useState<TCustomer[]>([])
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const router = useRouter()
 
-  async function handleGetAllCustomers() {
+  const handleGetAllCustomers = React.useCallback(async () => {
     try {
-      const response = await getAllCustomers()
+      const response = await getAllCustomers(page)
       setListCustomers(response)
       setIsLoading(false)
     } catch (error) {
@@ -38,7 +39,11 @@ export default function CustomersPage() {
         theme: 'colored',
       })
     }
-  }
+  }, [page])
+
+  React.useEffect(() => {
+    handleGetAllCustomers()
+  }, [page, handleGetAllCustomers])
 
   async function handleDeleteCustomer(keys: React.Key) {
     try {
@@ -54,14 +59,6 @@ export default function CustomersPage() {
     }
     console.log(keys)
   }
-
-  /* The `React.useEffect` hook in the provided code snippet is used to perform side effects in function
-components. In this case, it is making an asynchronous call to the `getAllCustomers` function when
-the component mounts (since the dependency array `[]` is empty, indicating that the effect should
-only run once after the initial render). */
-  React.useEffect(() => {
-    handleGetAllCustomers()
-  }, [])
 
   return (
     <main className="mb-40">
@@ -171,6 +168,26 @@ only run once after the initial render). */
             ))}
           </TableBody>
         </Table>
+        <section className="mt-6 flex w-full justify-end gap-2">
+          <Button
+            color="primary"
+            isDisabled={page === 1}
+            onClick={() => {
+              setPage((prevPage) => prevPage - 1)
+            }}
+          >
+            Anterior
+          </Button>
+          <Button
+            color="primary"
+            isDisabled={listCustomers.length < 4}
+            onClick={() => {
+              setPage((prevPage) => prevPage + 1)
+            }}
+          >
+            Próximo
+          </Button>
+        </section>
       </section>
       <ToastContainer />
     </main>

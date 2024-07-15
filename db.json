@@ -20,6 +20,48 @@
       "name": "Dudu Burko",
       "email": "dudu@dudu.com",
       "id": 2
+    },
+    {
+      "name": "Eduardo Burko",
+      "cep": "81170-370",
+      "number": "192",
+      "cpf": "032.924.479-50",
+      "phone": "(41) 99776-0254",
+      "status": true,
+      "street": "Rua Angelina Turesso Cavalim",
+      "district": "Cidade Industrial",
+      "city": "Curitiba",
+      "state": "PR",
+      "howMeet": "Google",
+      "id": 3
+    },
+    {
+      "name": "Dudu Burko",
+      "cep": "81170-300",
+      "number": "200",
+      "cpf": "032.924.479-50",
+      "phone": "(41) 99776-0254",
+      "status": false,
+      "street": "Avenida Juscelino Kubitschek de Oliveira",
+      "district": "Cidade Industrial",
+      "city": "Curitiba",
+      "state": "PR",
+      "howMeet": "Facebook",
+      "id": 4
+    },
+    {
+      "name": "Dudu Burko",
+      "cep": "81170-370",
+      "number": "192",
+      "cpf": "032.924.479-50",
+      "phone": "(41) 99776-0254",
+      "status": false,
+      "street": "Rua Angelina Turesso Cavalim",
+      "district": "Cidade Industrial",
+      "city": "Curitiba",
+      "state": "PR",
+      "howMeet": "Facebook",
+      "id": 5
     }
   ],
   "customers": [
