@@ -2,6 +2,7 @@
 
 import { createUserSchema, TUser } from '@/app/schemas/schemasZod'
 import 'react-toastify/dist/ReactToastify.css'
+import { FileWithPath, useDropzone } from 'react-dropzone'
 import {
   Button,
   cn,
@@ -26,6 +27,34 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { createUser } from '@/app/useCases/users/createUser'
 
 export default function AddFormCustomers() {
+  const baseStyle = {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    borderWidth: 2,
+    borderRadius: 2,
+    borderColor: '#eeeeee',
+    borderStyle: 'dashed',
+    backgroundColor: '#fafafa',
+    color: '#bdbdbd',
+    outline: 'none',
+    transition: 'border .24s ease-in-out',
+  }
+
+  const focusedStyle = {
+    borderColor: '#2196f3',
+  }
+
+  const acceptStyle = {
+    borderColor: '#00e676',
+  }
+
+  const rejectStyle = {
+    borderColor: '#ff1744',
+  }
+
   const router = useRouter()
   const [isFetching, setIsFetching] = React.useState<boolean>(false)
   const howMeet = [
@@ -33,6 +62,40 @@ export default function AddFormCustomers() {
     { key: 'Facebook', label: 'Facebook' },
     { key: 'Instagram', label: 'Instagram' },
   ]
+
+  const {
+    acceptedFiles,
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone()
+
+  const style = React.useMemo(
+    () => ({
+      ...baseStyle,
+      ...(isFocused ? focusedStyle : {}),
+      ...(isDragAccept ? acceptStyle : {}),
+      ...(isDragReject ? rejectStyle : {}),
+    }),
+    [
+      isFocused,
+      isDragAccept,
+      isDragReject,
+      focusedStyle,
+      acceptStyle,
+      rejectStyle,
+      baseStyle,
+    ],
+  )
+
+  const files = acceptedFiles.map((file: FileWithPath) => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+      <img src={file.path} alt="" className="h-20 w-20 object-cover" />
+    </li>
+  ))
 
   const {
     register,
@@ -93,7 +156,7 @@ export default function AddFormCustomers() {
   }, [errors])
 
   return (
-    <main className="flex h-screen flex-col">
+    <main className="mb-20 flex h-screen flex-col">
       <section id="HEADER" className="flex justify-between p-6">
         <section className="text-2xl font-semibold">Adicionar cliente</section>
         <section>
@@ -238,6 +301,16 @@ export default function AddFormCustomers() {
               <SelectItem key={item.key}>{item.label}</SelectItem>
             ))}
           </Select>
+        </section>
+        <section className="container">
+          <div {...getRootProps({ style })}>
+            <input {...getInputProps()} />
+            <p>Drag drop some files here, or click to select files</p>
+          </div>
+          <aside>
+            <h4>Files</h4>
+            <ul>{files}</ul>
+          </aside>
         </section>
         <section className="flex w-full justify-end p-6">
           <Button

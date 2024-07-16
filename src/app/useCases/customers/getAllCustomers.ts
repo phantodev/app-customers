@@ -7,6 +7,6 @@ export async function getAllCustomers(page: number): Promise<TCustomer[]> {
   //     resolve()
   //   }, 4000)
   // })
-  const response = await api.get(`/customers?_page=${page}&_limit=4`)
+  const response = await api.get(`/customers?_page=${page}&_limit=6`)
   return response.data
 }
